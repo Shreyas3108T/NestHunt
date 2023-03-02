@@ -1,0 +1,23 @@
+{
+  "name": "nest_hunt_backend",
+  "version": "1.0.0",
+  "description": "A Web-App that helps you find PG in your desired location and with your desired preferences",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shreyas3108T/NestHunt.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Shreyas3108T/NestHunt/issues"
+  },
+  "homepage": "https://github.com/Shreyas3108T/NestHunt#readme",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2"
+  }
+}
