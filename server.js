@@ -1,14 +1,34 @@
 const express = require("express");
+const mongoose = require("mongoose")
+const bodyParser = require("body-parser")
+const cors = require('cors');
+
+const {MainDb}= require("./MongoDBDatabaseConfig/Db")
+const {unsuccessfulResponse,successfulResponse}= require("./DevHelp/Response")
 require("dotenv").config()
+
+const ProjectId = process.env.ProjectId
 
 const app = express()
 
+app.use(cors());
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json())
+
+const Authentication = require("./Routes/Authentication")
+app.use("/v1",Authentication)
+
 
 app.get("/",(req,res)=>{
-    return res.json({
-        status:200,
-        message:"server is running fine"
-    })
+    if (MainDb.readyState !==1){
+        return  unsuccessfulResponse(req,res,504,"internal server error","The database connection failed",ProjectId)
+    }
+    // return res.json({
+    //     status:200,
+    //     message:"server is running fine"
+    // })
+
+    return successfulResponse(res,"server is running fine",{})
 })
 
 app.listen(process.env.PORT,()=>{
