@@ -23,7 +23,7 @@ exports.unsuccessfulResponse = async(req,res,statusCode,message,error,ProjectId)
         status:statusCode,
         success:false,
         message:message,
-        data:{}
+        data:{error}
     })
 }
 
