@@ -23,10 +23,6 @@ app.get("/",(req,res)=>{
     if (MainDb.readyState !==1){
         return  unsuccessfulResponse(req,res,504,"internal server error","The database connection failed",ProjectId)
     }
-    // return res.json({
-    //     status:200,
-    //     message:"server is running fine"
-    // })
 
     return successfulResponse(res,"server is running fine",{})
 })
