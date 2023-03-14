@@ -16,7 +16,7 @@ class Authentication{
     // }
     async SignUp(req,res){
         try{
-            const {Name,Email,Password,PhoneNo,Type} = req.body //Type we dont get from the user.
+            const {Name,Email,password,PhoneNo,Type} = req.body //Type we dont get from the user.
             const ValidatonError = validationResult(req)
             let saveduser
             // check with email and phone number weather or not user already exsits 
@@ -24,14 +24,14 @@ class Authentication{
                 return unsuccessfulResponse(req,res,422,"Validation Error",ValidatonError,ProjectId)
             }
             
-            const password = await bcrypt.hash(Password, 10);
+            const Password = await bcrypt.hash(password, 10);
 
             const UserObject = {
                     Name:Name,
                     Email:Email,
                     PhoneNo:PhoneNo,
                     Type:Type,
-                    Password:password
+                    Password:Password
             } 
             
             
