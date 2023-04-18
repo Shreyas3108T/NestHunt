@@ -7,7 +7,7 @@ const {body} = require("express-validator")
 
 router.post('/Signup',[
     body('Name').notEmpty().withMessage("Name is required"),
-    body('Email').notEmpty().withMessage("Email is required"),
+    body('Email').notEmpty().withMessage("Email is required "),
     body('password').isLength({min:8}).withMessage("password must be atleast 8 characters"),
     body('PhoneNo').notEmpty().withMessage("Phone Number"),
     body('Type').notEmpty().withMessage("Type of user is required")

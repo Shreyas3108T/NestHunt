@@ -8,12 +8,6 @@ const ProjectId = process.env.Project_Id
 
 class Authentication{
 
-    // ReqValidation(req,res){
-    //     const ValidatonError = validationResult(req)
-    //     if(!ValidatonError.isEmpty()){
-    //         return unsuccessfulResponse(req,res,422,"Validation Error",ValidatonError,ProjectId)
-    //     }
-    // }
     async SignUp(req,res){
         try{
             const {Name,Email,password,PhoneNo,Type} = req.body //Type we dont get from the user.
@@ -41,14 +35,15 @@ class Authentication{
                 saveduser = await newUser.save();
             }
             catch(error){
-                return unsuccessfulResponse(req,res,503,"internal server Error",error,ProjectId)
+                return unsuccessfulResponse(req,res,503,"Some Problem with saving data onto the database",error,ProjectId)
             }
 
-            const newToken = TokenGenerator({Id:saveduser.Id})
+            const newToken = TokenGenerator({Id:saveduser.Id,userType:Type})
             return successfulResponse(res,"User Created Successfully",{JWTToken:newToken})
 
         }
         catch(error){
+            console.log(Error)
             return unsuccessfulResponse(req,res,501,"Internal server Error",error,ProjectId)
         }
     }
@@ -68,7 +63,7 @@ class Authentication{
             
             const match = await bcrypt.compare(Password, user.Password);
             if (match){
-                const token = TokenGenerator({Id:user.Id})
+                const token = TokenGenerator({Id:user.Id,userType:user.Type})
                 return successfulResponse(res,"User signIn successful",{JWTToken:token})
             }
             else{

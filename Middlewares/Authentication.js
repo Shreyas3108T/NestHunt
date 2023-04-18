@@ -16,6 +16,8 @@ class Authentication{
             try{
                 const userInfo = verifyToken(token)
                 req.userId = userInfo.Id
+                req.userType = userInfo.userType
+                console.log("verifyLogin=",req.userId)
                 next()
             }
             catch(err){
@@ -24,6 +26,21 @@ class Authentication{
         }
         catch(error){
             return unsuccessfulResponse(req,res,511,"Internal server error",error,ProjectId)
+        }
+    }
+
+    async verfiyPgOwner(req,res,next){
+        try{
+            const userType = req.userType
+            if (userType == "PgOwner"){
+                console.log("verifyPgOwner",req.userId)
+                next()
+                return 
+            }
+            return unsuccessfulResponse(req,res,403,"The user is not authorized to handle this request","userType Wrong",ProjectId)
+        }
+        catch(error){
+            return unsuccessfulResponse(req,res,512,"Internal server error",error,ProjectId)
         }
     }
 }
