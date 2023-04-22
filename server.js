@@ -16,8 +16,10 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
 const Authentication = require("./Routes/Authentication")
-app.use("/v1",Authentication)
+const Property = require("./Routes/Property")
 
+app.use("/v1",Authentication)
+app.use("/v1",Property)
 
 app.get("/",(req,res)=>{
     if (MainDb.readyState !==1){
