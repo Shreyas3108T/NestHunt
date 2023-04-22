@@ -1,6 +1,7 @@
 const Express = require("express")
 const router = Express.Router()
 const middleware = require("../Middlewares/Authentication")
+const PropertyMiddleware = require("../Middlewares/Property")
 const controller = require("../Controllers/Property")
 const {body} = require("express-validator")
 
@@ -21,6 +22,24 @@ controller.CreateProperty //finally if everything works then come to controller
 router.get("/PropertyDetail",
 controller.GetProperty)
 
-router.get("/search",controller.Search)
+router.get("/search"
+,controller.Search)
 
+router.post("/CreateRoom",
+middleware.verfiyLogin,
+middleware.verfiyPgOwner,
+[body('PgId').notEmpty().withMessage("PgId is required")],
+PropertyMiddleware.verfiyPGwithUser,
+controller.addOneRoom
+)
+
+router.post("/CreateRooms",
+middleware.verfiyLogin,
+middleware.verfiyPgOwner,
+[body('PgId').notEmpty().withMessage("PgId is required"),
+body("NoOfRooms").notEmpty().withMessage("NoOfRooms is required").isNumeric("Should be a number")],
+PropertyMiddleware.verfiyPGwithUser,
+controller.AddMultipleRooms
+
+)
 module.exports = router
