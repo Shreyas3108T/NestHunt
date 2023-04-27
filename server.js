@@ -17,9 +17,11 @@ app.use(bodyParser.json())
 
 const Authentication = require("./Routes/Authentication")
 const Property = require("./Routes/Property")
+const Notice = require("./Routes/Notice")
 
 app.use("/v1",Authentication)
 app.use("/v1",Property)
+app.use("/v1",Notice)
 
 app.get("/",(req,res)=>{
     if (MainDb.readyState !==1){

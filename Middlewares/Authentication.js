@@ -33,7 +33,6 @@ class Authentication{
         try{
             const userType = req.userType
             if (userType == "PgOwner"){
-                console.log("verifyPgOwner",req.userId)
                 next()
                 return 
             }
@@ -41,6 +40,19 @@ class Authentication{
         }
         catch(error){
             return unsuccessfulResponse(req,res,512,"Internal server error",error,ProjectId)
+        }
+    }
+
+    async VerifyPgCustomer(req,res,next){
+        try{
+            const userType = req.userType
+            if (userType == "Customer"){
+                //Code not complete 
+                next()
+            }
+        }
+        catch(error){
+            unsuccessfulResponse(req,res,503,"Internal server Error,error in Pg customer Verification",error,ProjectId)
         }
     }
 }
