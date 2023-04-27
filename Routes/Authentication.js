@@ -20,6 +20,7 @@ router.post('/Signin',[
 ],
 controller.SignIn)
 
+router.get("/UserInfo",middleware.verfiyLogin,controller.UserInfo)
 router.get("/Authtest",middleware.verfiyLogin,controller.Authtest)
 
 module.exports = router

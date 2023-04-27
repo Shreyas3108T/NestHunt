@@ -76,6 +76,26 @@ class Authentication{
         }
     }
 
+    async UserInfo(req,res){
+        try{
+            const userId = req.userId
+            const foundUser = await User.findOne({Id:userId})
+            if(foundUser){
+                const Info = {
+                    Id:foundUser.Id,
+                    Name:foundUser.Name,
+                    PhoneNo:foundUser.PhoneNo,
+                    Email:foundUser.Email,
+                    Type:foundUser.Type
+                }
+                return successfulResponse(res,"user data",Info)
+            }
+            return unsuccessfulResponse(req,res,404,"No user data Found","no user data",ProjectId)
+        }
+        catch(error){
+            return unsuccessfulResponse(req,res,501,"internal server error",error,ProjectId)
+        }
+    }
     async Authtest(req,res){
         try{
             return successfulResponse(res,"Authenticated user",{user:req.userId})

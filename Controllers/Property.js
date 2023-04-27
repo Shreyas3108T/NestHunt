@@ -146,7 +146,7 @@ class properity{
         }
     }
 
-    async AddMultipleRooms(req,res){ // of same type or replicate an
+    async AddMultipleRooms(req,res){ // of same type 
         try{
             const ValidatonError = validationResult(req)
             if(!ValidatonError.isEmpty()){
