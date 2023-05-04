@@ -2,6 +2,7 @@ const { IdGenerator } = require("../DevHelp/ID");
 const { unsuccessfulResponse,successfulResponse } = require("../DevHelp/Response")
 const NoticeSchema = require("../MongoDBDatabaseConfig/models/Notice")
 const property = require("../MongoDBDatabaseConfig/models/Properties")
+const UserSchema = require("../MongoDBDatabaseConfig/models/Users")
 const Room = require("../MongoDBDatabaseConfig/models/Rooms")
 const {validationResult} =  require("express-validator");
 const ProjectId = process.env.ProjectId
@@ -32,7 +33,13 @@ class Notice{
 
     async Notice(req,res){
         try{
-
+            const UserId = req.UserId
+            const UserInfo = await UserSchema.findOne({Id:UserId})
+            if(UserInfo.PgAssociation){
+                const Notices = await  Notice.find({PgId:UserInfo.PgAssociation,Active:true})
+                return successfulResponse(res,"All the notices",Notices)
+            }
+            
         }
         catch(error){
             return unsuccessfulResponse(req,res,501,"Intenal Server Error",error,ProjectId)

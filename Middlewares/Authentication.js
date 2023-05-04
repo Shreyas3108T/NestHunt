@@ -1,5 +1,6 @@
 const { unsuccessfulResponse } = require("../DevHelp/Response")
 const {verifyToken} = require("../DevHelp/Token")
+const UserSchema = require("../MongoDBDatabaseConfig/models/Users")
 require("dotenv").config()
 const ProjectId = process.env.Project_Id
 
@@ -17,7 +18,6 @@ class Authentication{
                 const userInfo = verifyToken(token)
                 req.userId = userInfo.Id
                 req.userType = userInfo.userType
-                console.log("verifyLogin=",req.userId)
                 next()
             }
             catch(err){
@@ -43,16 +43,35 @@ class Authentication{
         }
     }
 
-    async VerifyPgCustomer(req,res,next){
+
+    async GetCustomerPgId(req,res,next){
         try{
             const userType = req.userType
             if (userType == "Customer"){
-                //Code not complete 
-                next()
+                const UserInfo = await UserSchema({Id:req.userId})
+                if(UserInfo.PgAssociation){
+                    req.PgId = UserInfo.PgAssociation
+                    return next()
+                }
+                return unsuccessfulResponse(req,res,405,"No Pg associated","No PGID",ProjectId)
             }
+            return unsuccessfulResponse(req,res,407,"User Type is not Customer/Tenent","UserType mis Match",ProjectId)
         }
         catch(error){
-            unsuccessfulResponse(req,res,503,"Internal server Error,error in Pg customer Verification",error,ProjectId)
+            return unsuccessfulResponse(req,res,503,"Internal server Error",error,ProjectId)
+        }
+    }
+
+    async VerifyCustomer(req,res,next){
+        try{
+            const userType = req.userType
+            if (userType == "Customer"){
+                return next()
+            }
+            return unsuccessfulResponse(req,res,403,"userType not allowed","User Type should be Customer",ProjectId)
+        }
+        catch(error){
+            return unsuccessfulResponse(req,res,503,"Internal Server Error",error,ProjectId)
         }
     }
 }
