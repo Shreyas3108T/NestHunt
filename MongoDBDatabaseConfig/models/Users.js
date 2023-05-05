@@ -43,6 +43,9 @@ const UserSchema = new Schema({
     Password:{
         type:String,
         required:true
+    },
+    PgAssociation:{ //only for customers and Pg employees for PgOwner with multiple pgs will have to PG
+        type:String
     }
       
 },{timestamps:true}

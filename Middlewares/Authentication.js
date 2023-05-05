@@ -1,5 +1,6 @@
 const { unsuccessfulResponse } = require("../DevHelp/Response")
 const {verifyToken} = require("../DevHelp/Token")
+const UserSchema = require("../MongoDBDatabaseConfig/models/Users")
 require("dotenv").config()
 const ProjectId = process.env.Project_Id
 
@@ -17,7 +18,6 @@ class Authentication{
                 const userInfo = verifyToken(token)
                 req.userId = userInfo.Id
                 req.userType = userInfo.userType
-                console.log("verifyLogin=",req.userId)
                 next()
             }
             catch(err){
@@ -33,7 +33,6 @@ class Authentication{
         try{
             const userType = req.userType
             if (userType == "PgOwner"){
-                console.log("verifyPgOwner",req.userId)
                 next()
                 return 
             }
@@ -41,6 +40,50 @@ class Authentication{
         }
         catch(error){
             return unsuccessfulResponse(req,res,512,"Internal server error",error,ProjectId)
+        }
+    }
+
+
+    async GetCustomerPgId(req,res,next){
+        try{
+            const userType = req.userType
+            if (userType == "Customer"){
+                const UserInfo = await UserSchema.findOne({Id:req.userId})
+                if(UserInfo.PgAssociation){
+                    req.PgId = UserInfo.PgAssociation
+                    return next()
+                }
+                return unsuccessfulResponse(req,res,405,"No Pg associated","No PGID",ProjectId)
+            }
+            return unsuccessfulResponse(req,res,407,"User Type is not Customer/Tenent","UserType mis Match",ProjectId)
+        }
+        catch(error){
+            return unsuccessfulResponse(req,res,503,"Internal server Error",error,ProjectId)
+        }
+    }
+
+    async VerifyCustomer(req,res,next){
+        try{
+            const userType = req.userType
+            if (userType == "Customer"){
+                return next()
+            }
+            return unsuccessfulResponse(req,res,403,"userType not allowed","User Type should be Customer",ProjectId)
+        }
+        catch(error){
+            return unsuccessfulResponse(req,res,503,"Internal Server Error",error,ProjectId)
+        }
+    }
+
+    async GetPgId(req,res,next){
+        try{
+            const UserInfo = await UserSchema.findOne({Id:req.userId})
+            req.PgId = UserInfo.PgId
+            console.log("req.PgId",req.PgId,UserInfo)
+            next()
+        }
+        catch(error){
+            return unsuccessfulResponse(req,res,503,"Internal Server Error",error,ProjectId)
         }
     }
 }
