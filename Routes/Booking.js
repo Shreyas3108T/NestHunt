@@ -10,6 +10,13 @@ router.post("/viewRequest",[
     body("date").notEmpty().withMessage("date is required in the format dd/mm/yyyy")
 ],middleware.verfiyLogin,middleware.VerifyCustomer,controller.ViewRequest)
 
+
+router.post("/BookRequest",[
+    body("RoomId").notEmpty().withMessage("RoomId is required"),
+    body("PgId").notEmpty().withMessage("PgId is required"),
+    body("date").notEmpty().withMessage("date is required in the format dd/mm/yyyy")
+],middleware.verfiyLogin,middleware.VerifyCustomer,controller.BookRequest)
+
 router.post("/ApproveRequest",[
     body("BookingId").notEmpty().withMessage("BookingId is required"),
     body("approvalStatus").notEmpty().withMessage("approvalStatus is reuqired").isNumeric()

@@ -185,6 +185,28 @@ class properity{
             return unsuccessfulResponse(req,res,501,"internal server error",error,ProjectId)
         }
     }
+
+    async GetRooms(req,res){
+        try{
+            const {PgId} = req.query
+            const RoomsList = await Room.find({PgId:PgId})
+            return successfulResponse(res,"All the rooms",RoomsList)
+        }
+        catch(error){
+            return unsuccessfulResponse(req,res,501,"Internal Server Error",error,ProjectId)
+        }
+    }
+
+    async GetRoomsAvailable(req,res){
+        try{
+            const {PgId} = req.query
+            const RoomsList = await Room.find({PgId:PgId,Occupancy:false})
+            return successfulResponse(res,"All the rooms Available",RoomsList)
+        }
+        catch(error){
+            return unsuccessfulResponse(req,res,501,"Internal Server Error",error,ProjectId)
+        }
+    }
 }
 
 module.exports = new properity
