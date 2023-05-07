@@ -78,7 +78,7 @@ class Authentication{
     async GetPgId(req,res,next){
         try{
             const UserInfo = await UserSchema.findOne({Id:req.userId})
-            req.PgId = UserInfo.PgId
+            req.PgId = UserInfo.PgId // this is wrong fix this 
             console.log("req.PgId",req.PgId,UserInfo)
             next()
         }

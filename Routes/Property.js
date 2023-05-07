@@ -42,4 +42,9 @@ PropertyMiddleware.verfiyPGwithUser,
 controller.AddMultipleRooms
 
 )
+
+
+router.get("/Rooms",controller.GetRooms)
+
+router.get("/RoomsAvailable",controller.GetRoomsAvailable)
 module.exports = router
