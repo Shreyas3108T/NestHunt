@@ -68,7 +68,7 @@ class Authentication{
             if (userType == "Customer"){
                 return next()
             }
-            return unsuccessfulResponse(req,res,403,"userType not allowed","User Type should be Customer",ProjectId)
+            return unsuccessfulResponse(req,res,413,"userType not allowed","User Type should be Customer",ProjectId)
         }
         catch(error){
             return unsuccessfulResponse(req,res,503,"Internal Server Error",error,ProjectId)
