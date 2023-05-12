@@ -12,9 +12,9 @@ exports.unsuccessfulResponse = async(req,res,statusCode,message,error,ProjectId)
             ErrorActive:true
         })
     
-        if ((parseInt(statusCode) >= 500 && parseInt(statusCode) <=599) || parseInt(statusCode) === 422){
+        
             newerror.save(); //only save the internal errors 
-        } 
+        
 
     
     
