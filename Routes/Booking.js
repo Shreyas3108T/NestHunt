@@ -32,4 +32,6 @@ middleware.verfiyLogin,controller.BookingInfo)
 
 
 router.get("/Tenents",middleware.verfiyLogin,middleware.verfiyPgOwner,controller.AllTenents)
+
+router.get("/BookingHistory",middleware.verfiyLogin,middleware.VerifyCustomer,controller.Bookinghistory)
 module.exports = router

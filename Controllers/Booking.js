@@ -176,6 +176,19 @@ class Booking{
             return unsuccessfulResponse(req,res,501,"Internal Server Error",error,ProjectId)
         }
     }
+
+    async Bookinghistory(req,res){
+        try{
+            const bookings = await BookingSchema.find({UserId:req.userId})
+            if (bookings.length === 0){
+                return successfulResponse(res,"No Booking History",[])
+            }
+            return successfulResponse(res,"Booking history",bookings)
+        }
+        catch(error){
+            return unsuccessfulResponse(req,res,501,"Internal server Error",ProjectId)
+        }
+    }
 }
 
 module.exports = new Booking
