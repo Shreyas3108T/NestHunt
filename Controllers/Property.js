@@ -207,6 +207,23 @@ class properity{
             return unsuccessfulResponse(req,res,501,"Internal Server Error",error,ProjectId)
         }
     }
+
+    async GetPgIdByUserId(req,res){
+        try{
+            // req.userId
+
+            const PG = await Property.findOne({Owner:req.userId})
+            if(!PG){
+                return unsuccessfulResponse(req,res,203,"No Pg Created by the user,prompt to create new Pg",PG,ProjectId)
+            }
+            return successfulResponse(res,"Pg data",PG)
+
+        }
+        catch(error){
+            console.log(error)
+            return unsuccessfulResponse(req,res,501,"internal server error",error,ProjectId)
+        }
+    }
 }
 
 module.exports = new properity

@@ -47,4 +47,6 @@ controller.AddMultipleRooms
 router.get("/Rooms",controller.GetRooms)
 
 router.get("/RoomsAvailable",controller.GetRoomsAvailable)
+
+router.get("/PgbyUser",middleware.verfiyLogin,middleware.verfiyPgOwner,controller.GetPgIdByUserId)
 module.exports = router
