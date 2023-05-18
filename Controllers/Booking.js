@@ -97,6 +97,10 @@ class Booking{
             }
             const Approval = approvalStatus === 1 ? "Approved" : "Denied";
             const UpdateBookingRequest = await BookingSchema.updateOne({Id:BookingId},{Approval:Approval,Active:false}) 
+            if (checkBookingRequest.BookingType == "Book"){
+                const updatedRoom = await Room.updateOne({RoomId:checkBookingRequest.RoomId},{OccupantId:checkBookingRequest.UserId})
+            }
+            
             return successfulResponse(res,`Booking Successfully ${Approval}`,UpdateBookingRequest)
         }
         catch(error){
