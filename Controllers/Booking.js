@@ -112,7 +112,7 @@ class Booking{
         try{
             const PGs = await property.find({Owner:req.userId})
             const BookingReqelements = await Promise.all(PGs.map(async element => {
-                return await BookingSchema.findOne({ PgId: element.Id,Active:true});
+                return await BookingSchema.find({ PgId: element.Id,Active:true});
             }));
 
             const BookingElements = Array.from(BookingReqelements).filter(element => element !== null);
