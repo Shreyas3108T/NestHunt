@@ -86,7 +86,9 @@ class Authentication{
                     Name:foundUser.Name,
                     PhoneNo:foundUser.PhoneNo,
                     Email:foundUser.Email,
-                    Type:foundUser.Type
+                    Type:foundUser.Type,
+                    PgAssociation:foundUser.PgAssociation
+
                 }
                 return successfulResponse(res,"user data",Info)
             }
