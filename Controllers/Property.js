@@ -3,6 +3,7 @@ const { unsuccessfulResponse,successfulResponse } = require("../DevHelp/Response
 const Property = require("../MongoDBDatabaseConfig/models/Properties")
 const Room = require("../MongoDBDatabaseConfig/models/Rooms")
 const {validationResult} =  require("express-validator");
+const UserSchema = require("../MongoDBDatabaseConfig/models/Users")
 const ProjectId = process.env.ProjectId
 class properity{
 
@@ -16,8 +17,9 @@ class properity{
                 return unsuccessfulResponse(req,res,422,"Validation Error",ValidatonError,ProjectId)
             }
             //put a validation here if the user has the exact same address already stored return an error 
+            const PgId = "P-" + IdGenerator()
             const newProperty = new Property({
-                Id: "P-" + IdGenerator(),
+                Id: PgId,
                 Owner:req.userId,
                 Name:Name,
                 address:{
@@ -37,6 +39,7 @@ class properity{
             })
             try{
                 const savedproperty = await newProperty.save();
+                const UserUpdate = await UserSchema.updateOne({Id:req.userId},{PgAssociation:PgId})
                 return successfulResponse(res,"Property created",savedproperty)
             }
             catch(error){
