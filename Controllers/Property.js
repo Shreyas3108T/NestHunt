@@ -118,11 +118,14 @@ class properity{
 
     async addOneRoom(req,res){
         try{
-            const {PgId,RoomName} = req.body
+            const {RoomName} = req.body
             const ValidatonError = validationResult(req)
             if(!ValidatonError.isEmpty()){
                 return unsuccessfulResponse(req,res,422,"Validation Error",ValidatonError,ProjectId)
             }
+
+            const PG = await Property.findOne({Owner:req.userId})
+            const PgId = PG.Id
             const IdRoom = PgId + "@" + "R" + "-" + IdGenerator()
             const NewRoom = new Room({
                 RoomId:IdRoom,
