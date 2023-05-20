@@ -8,6 +8,10 @@ const RoomSchema = new mongoose.Schema({
         type:String,
         required:true //make room id = Pgid +R+idgen()
     },
+    RoomName:{
+        type:String,
+        required:true
+    },
     PgId:{
         type:String,
         required:true 

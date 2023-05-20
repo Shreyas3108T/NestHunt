@@ -28,7 +28,8 @@ router.get("/search"
 router.post("/CreateRoom",
 middleware.verfiyLogin,
 middleware.verfiyPgOwner,
-[body('PgId').notEmpty().withMessage("PgId is required")],
+[body('PgId').notEmpty().withMessage("PgId is required"),
+body("RoomName").notEmpty().withMessage("RoomName is required")],
 PropertyMiddleware.verfiyPGwithUser,
 controller.addOneRoom
 )

@@ -118,7 +118,7 @@ class properity{
 
     async addOneRoom(req,res){
         try{
-            const {PgId} = req.body
+            const {PgId,RoomName} = req.body
             const ValidatonError = validationResult(req)
             if(!ValidatonError.isEmpty()){
                 return unsuccessfulResponse(req,res,422,"Validation Error",ValidatonError,ProjectId)
@@ -126,6 +126,7 @@ class properity{
             const IdRoom = PgId + "@" + "R" + "-" + IdGenerator()
             const NewRoom = new Room({
                 RoomId:IdRoom,
+                RoomName:RoomName,
                 PgId:PgId
             })
             try{
