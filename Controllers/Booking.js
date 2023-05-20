@@ -99,6 +99,7 @@ class Booking{
             const UpdateBookingRequest = await BookingSchema.updateOne({Id:BookingId},{Approval:Approval,Active:false}) 
             if (checkBookingRequest.BookingType == "Book"){
                 const updatedRoom = await Room.updateOne({RoomId:checkBookingRequest.RoomId},{OccupantId:checkBookingRequest.UserId})
+                const userUpdate = await UserSchema.updateOne({Id:checkBookingRequest.UserId},{PgAssociation:checkBookingRequest.PgId})
             }
             
             return successfulResponse(res,`Booking Successfully ${Approval}`,UpdateBookingRequest)
