@@ -19,11 +19,13 @@ const Authentication = require("./Routes/Authentication")
 const Property = require("./Routes/Property")
 const Notice = require("./Routes/Notice")
 const Booking = require("./Routes/Booking")
+const Service = require("./Routes/Services")
 
 app.use("/v1",Authentication)
 app.use("/v1",Property)
 app.use("/v1",Notice)
 app.use("/v1",Booking)
+app.use("/v1",Service)
 
 app.get("/",(req,res)=>{
     if (MainDb.readyState !==1){
