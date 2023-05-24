@@ -1,6 +1,7 @@
 const { unsuccessfulResponse } = require("../DevHelp/Response")
 const {verifyToken} = require("../DevHelp/Token")
 const UserSchema = require("../MongoDBDatabaseConfig/models/Users")
+const {validationResult} =  require("express-validator");
 require("dotenv").config()
 const ProjectId = process.env.Project_Id
 
@@ -84,6 +85,19 @@ class Authentication{
         }
         catch(error){
             return unsuccessfulResponse(req,res,503,"Internal Server Error",error,ProjectId)
+        }
+    }
+
+    async inputValidation(req,res,next){
+        try{
+            const ValidationError = validationResult(req)
+            if(! ValidationError.isEmpty()){
+                return unsuccessfulResponse(req,res,465,"Validation Error",ValidationError,ProjectId)
+            }
+            next()
+        }
+        catch(error){
+            return unsuccessfulResponse(req,res,503,"internal server error",error,ProjectId)
         }
     }
 }
