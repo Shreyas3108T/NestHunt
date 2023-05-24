@@ -38,13 +38,13 @@ const UserSchema = new Schema({
     },
     Type:{
         type:String,
-        required:true
+        required:true //PgEmployee Customer PgOwner
     },
     Password:{
         type:String,
         required:true
     },
-    PgAssociation:{ //only for customers and Pg employees for PgOwner with multiple pgs will have to PG
+    PgAssociation:{ //only for customers and PgEmployee for PgOwner with multiple pgs will have to PG
         type:String
     }
       
