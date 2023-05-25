@@ -151,7 +151,7 @@ class Service{
 
         }
         catch(error){
-            console.log("e=>",error)
+
             return unsuccessfulResponse(req,res,501,"Internal server error",error,ProjectId)
         }
     }
@@ -184,13 +184,13 @@ class Service{
             if(! ValidationError.isEmpty()){
                 return unsuccessfulResponse(req,res,465,"Validation Error",ValidationError,ProjectId)
             }
-        if(OnlyActive){
+        if(OnlyActive === true){
             if(req.userType === "Customer"){
                 const SRs = await SerivceRequestSchema.find({UserId:req.userId,Active:true})
                 return successfulResponse(res,"All the active Service Requests",SRs)
             }
             if(req.userType === "PgOwner"){
-                const userInfo = await userSchema.find({Id:req.userId})
+                const userInfo = await userSchema.findOne({Id:req.userId})
                 const SRs = await SerivceRequestSchema.find({PgId:userInfo.PgAssociation,Active:true})
                 return successfulResponse(res,"All the active Service Requests",SRs)
             }
@@ -207,7 +207,7 @@ class Service{
                 return successfulResponse(res,"All the active Service Requests",SRs)
             }
             if(req.userType === "PgOwner"){
-                const userInfo = await userSchema.find({Id:req.userId})
+                const userInfo = await userSchema.findOne({Id:req.userId})
                 const SRs = await SerivceRequestSchema.find({PgId:userInfo.PgAssociation})
                 return successfulResponse(res,"All the active Service Requests",SRs)
             }
