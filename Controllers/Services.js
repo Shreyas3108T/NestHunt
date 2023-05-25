@@ -204,16 +204,16 @@ class Service{
         else{
             if(req.userType === "Customer"){
                 const SRs = await SerivceRequestSchema.find({UserId:req.userId})
-                return successfulResponse(res,"All the active Service Requests",SRs)
+                return successfulResponse(res,"All the Service Requests",SRs)
             }
             if(req.userType === "PgOwner"){
                 const userInfo = await userSchema.findOne({Id:req.userId})
                 const SRs = await SerivceRequestSchema.find({PgId:userInfo.PgAssociation})
-                return successfulResponse(res,"All the active Service Requests",SRs)
+                return successfulResponse(res,"All the Service Requests",SRs)
             }
             if(req.userType === "PgEmployee"){
                 const SRs = await SerivceRequestSchema.find({assignedTo:req.userId})
-                return successfulResponse(res,"All the active Service Requests",SRs)
+                return successfulResponse(res,"All the  Service Requests",SRs)
             }
             return unsuccessfulResponse(req,res,601,"Not possible user has to be of one type","user type impossible",ProjectId)
         }
