@@ -23,4 +23,12 @@ controller.SignIn)
 router.get("/UserInfo",middleware.verfiyLogin,controller.UserInfo)
 router.get("/Authtest",middleware.verfiyLogin,controller.Authtest)
 
+router.get("/TenentInfo",[
+    body("UserId").notEmpty().withMessage("UserId is required as a body parameter")
+],
+middleware.inputValidation,
+middleware.verfiyLogin,
+middleware.verfiyPgOwner,
+controller.tenentInfo)
+
 module.exports = router

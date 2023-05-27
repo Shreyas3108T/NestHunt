@@ -7,6 +7,7 @@ const SerivceRequestSchema = require("../MongoDBDatabaseConfig/models/ServiceReq
 const ProjectId = process.env.ProjectId
 const {validationResult} =  require("express-validator");
 const ServiceRequest = require("../MongoDBDatabaseConfig/models/ServiceRequest")
+const RoomSchema = require("../MongoDBDatabaseConfig/models/Rooms")
 
 class Service{
 
@@ -127,20 +128,21 @@ class Service{
             }
             const ServiceData = await ServiceSchema.findOne({Id:ServiceId})
             const UserInfo = await userSchema.findOne({Id:req.userId})
+            const RoomId = await RoomSchema.findOne({OccupantId:req.userId})
             if (ServiceData){
                 if(UserInfo){
                     if(ServiceData.PgId === UserInfo.PgAssociation){
-                        const ServiceRequestId = "Sr-" +IdGenerator()
+                        const ServiceRequestId = "SR-" +IdGenerator()
                         const ServiceRequest = new SerivceRequestSchema({
                             Id:ServiceRequestId,
                             ServiceId:ServiceId,
                             UserId:req.userId,
                             PgId:ServiceData.PgId,
-                            lastUpdatedby:req.userId
+                            lastUpdatedby:req.userId,
+                            RoomId:RoomId
                         })
                         ServiceRequest.save()
                         return successfulResponse(res,"Service Request Created Successfully",ServiceRequest)
-
                     }
                     return unsuccessfulResponse(req,res,405,"Your Pg doesn't serve this request","PgId mis match for",ProjectId)
                 }
