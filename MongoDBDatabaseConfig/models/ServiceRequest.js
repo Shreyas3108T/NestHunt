@@ -40,6 +40,10 @@ const SerivceRequestSchema = new Schema({
         type:String,
         required:true,
         default:"empty"
+    },
+    RoomId:{
+        type:String,
+        require:true
     }
 },{timestamps:true})
 

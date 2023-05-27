@@ -106,6 +106,21 @@ class Authentication{
             return unsuccessfulResponse(req,res,501,"internal server error",error,ProjectId)
         }
     }
+
+    async tenentInfo(req,res){
+        try{
+            const {UserId} = req.body
+            const userInfo = await User.findOne({Id:UserId})
+            const OwnerInfo = await User.findOne({Id:req.userId})
+            if(userInfo.PgAssociation === OwnerInfo.PgAssociation){
+                return successfulResponse(res,"Here is the userInformation",userInfo)
+            }
+            return unsuccessfulResponse(req,res,404,"User not tenent","mismatch of pg association",ProjectId)
+        }
+        catch(error){
+            return unsuccessfulResponse(req,res,501,"Internal server error",error,ProjectId)
+        }
+    }
 }
 
 module.exports = new Authentication
