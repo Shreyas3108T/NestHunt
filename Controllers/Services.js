@@ -128,7 +128,7 @@ class Service{
             }
             const ServiceData = await ServiceSchema.findOne({Id:ServiceId})
             const UserInfo = await userSchema.findOne({Id:req.userId})
-            const RoomId = await RoomSchema.findOne({OccupantId:req.userId})
+            const RoomId = await RoomSchema.findOne({OccupantId:req.userId}).RoomId
             if (ServiceData){
                 if(UserInfo){
                     if(ServiceData.PgId === UserInfo.PgAssociation){
