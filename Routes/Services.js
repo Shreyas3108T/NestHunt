@@ -55,4 +55,12 @@ middleware.inputValidation,
 middleware.verfiyLogin,
 controller.ShowAllSR)
 
+router.get("/SRDetail",
+[
+    query("ServiceRequestId").notEmpty().withMessage("ServiceRequestId is required in Query parameter")
+],
+middleware.inputValidation,
+middleware.verfiyLogin,
+controller.ServiceRequestDetail)
+
 module.exports = router

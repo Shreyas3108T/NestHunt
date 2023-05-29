@@ -36,7 +36,7 @@ const SerivceRequestSchema = new Schema({
         type:String,
         required:true
     },
-    assignedTo:{
+    s:{
         type:String,
         required:true,
         default:"empty"

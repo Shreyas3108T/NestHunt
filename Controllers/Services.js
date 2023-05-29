@@ -46,15 +46,6 @@ class Service{
             return unsuccessfulResponse(req,res,501,"Internal server error",error,ProjectId)
         }
     }
-    // async DeleteService(req,res){
-    //     //delete
-    //     try{
-            
-    //     }
-    //     catch(error){
-    //         return unsuccessfulResponse(req,res,501,"Internal server error",error,ProjectId)
-    //     }
-    // }
     async deactivate(req,res){
         //make it inactive 
         try{
@@ -157,7 +148,6 @@ class Service{
             return unsuccessfulResponse(req,res,501,"Internal server error",error,ProjectId)
         }
     }
-
     async ChangeSRStatus(req,res){
         try{
             const {status,ServiceId} = req.body
@@ -178,7 +168,6 @@ class Service{
             return unsuccessfulResponse(req,res,501,"internal server error",error,ProjectId)
         }
     }
-
     async ShowAllSR(req,res){
      try{
         const {OnlyActive} = req.query
@@ -226,7 +215,20 @@ class Service{
         return unsuccessfulResponse(req,res,501,"Internal server Error",error,ProjectId)
      } 
     }
-
+    async ServiceRequestDetail(req,res){
+        try{
+            const {ServiceRequestId} = req.query
+            const SRdetail = await SerivceRequestSchema.findOne({Id:ServiceRequestId})
+            const userInfo = await userSchema.findOne({Id:req.userId})
+            if ((SRdetail) && (userInfo.Type === "PgOwner" && userInfo.PgAssociation === SRdetail.PgId) ||(SRdetail.UserId === userInfo.Id || SRdetail.assignedTo === userInfo.Id)){
+                return successfulResponse(res,"Service Reuqest Details",SRdetail)  
+            }
+            return unsuccessfulResponse(req,res,403,"access not available","Not assoicated with the request in any way",ProjectId)
+        }
+        catch(error){
+            return unsuccessfulResponse(req,res,501,"Internal server error")
+        }
+    }
     
 
 }
