@@ -47,7 +47,6 @@ const UserSchema = new Schema({
     PgAssociation:{ //only for customers and PgEmployee for PgOwner with multiple pgs will have to PG
         type:String
     }
-      
 },{timestamps:true}
 )
 

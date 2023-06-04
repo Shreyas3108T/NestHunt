@@ -63,4 +63,12 @@ middleware.inputValidation,
 middleware.verfiyLogin,
 controller.ServiceRequestDetail)
 
+router.post("/assignTask",[
+    body("ServiceRequestId").notEmpty().withMessage("ServiceRequestId is required"),
+    body("EmployeeId").notEmpty().withMessage("EmployeeId is required")
+],
+middleware.inputValidation,
+middleware.verfiyLogin,
+middleware.verfiyPgOwner,
+controller.AssignTask)
 module.exports = router

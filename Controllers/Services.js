@@ -6,7 +6,6 @@ const userSchema = require("../MongoDBDatabaseConfig/models/Users")
 const SerivceRequestSchema = require("../MongoDBDatabaseConfig/models/ServiceRequest")
 const ProjectId = process.env.ProjectId
 const {validationResult} =  require("express-validator");
-const ServiceRequest = require("../MongoDBDatabaseConfig/models/ServiceRequest")
 const RoomSchema = require("../MongoDBDatabaseConfig/models/Rooms")
 
 class Service{
@@ -119,7 +118,7 @@ class Service{
             }
             const ServiceData = await ServiceSchema.findOne({Id:ServiceId})
             const UserInfo = await userSchema.findOne({Id:req.userId})
-            const RoomId = await RoomSchema.findOne({OccupantId:req.userId}).RoomId
+            const RoomId = await RoomSchema.findOne({OccupantId:req.userId})
             if (ServiceData){
                 if(UserInfo){
                     if(ServiceData.PgId === UserInfo.PgAssociation){
@@ -130,7 +129,7 @@ class Service{
                             UserId:req.userId,
                             PgId:ServiceData.PgId,
                             lastUpdatedby:req.userId,
-                            RoomId:RoomId
+                            RoomId:RoomId.RoomId
                         })
                         ServiceRequest.save()
                         return successfulResponse(res,"Service Request Created Successfully",ServiceRequest)
@@ -227,6 +226,28 @@ class Service{
         }
         catch(error){
             return unsuccessfulResponse(req,res,501,"Internal server error")
+        }
+    }
+    async AssignTask(req,res){
+        try{
+            const {ServiceRequestId,EmployeeId} = req.body
+            const SR = await SerivceRequestSchema.findOne({Id:ServiceRequestId})
+            const PgOwner = await userSchema.findOne({Id:req.userId})
+            const Employee = await userSchema.findOne({Id:EmployeeId,Type:"PgEmployee"})
+            if(!SR){
+                return unsuccessfulResponse(req,res,404,"No Service Request Found","No SR",ProjectId)
+            }
+            if(!Employee){
+                return unsuccessfulResponse(req,res,404,"No Employee found ","No Employee",ProjectId)
+            }
+            if(Employee.PgAssociation === SR.PgId && PgOwner.PgAssociation === SR.PgId){
+                const UpdateSR = await SerivceRequestSchema.updateOne({Id:ServiceRequestId},{assignedTo:EmployeeId})
+                return successfulResponse(res,`Task assigned to ${Employee.Name}`,"Updated")
+            }
+            return unsuccessfulResponse(req,res,405,"Mismatch in PgId","PgId mismatch",ProjectId)
+        }
+        catch(error){
+            return unsuccessfulResponse(req,res,501,"internal Server error assignTask",error,ProjectId)
         }
     }
     
