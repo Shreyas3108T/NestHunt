@@ -31,4 +31,13 @@ middleware.verfiyLogin,
 middleware.verfiyPgOwner,
 controller.tenentInfo)
 
+router.post("/CreateEmployeeAccount",[
+    body('Name').notEmpty().withMessage("Name is required"),
+    body('Email').notEmpty().withMessage("Email is required "),
+    body('password').isLength({min:8}).withMessage("password must be atleast 8 characters"),
+    body('PhoneNo').notEmpty().withMessage("Phone Number")
+],
+middleware.inputValidation,middleware.verfiyLogin,middleware.verfiyPgOwner,controller.CreateEmployeeAccount)
+
+router.get("/GetAllEmployees",middleware.verfiyLogin,middleware.verfiyPgOwner,controller.ShowAllEmployeesInaPg)
 module.exports = router

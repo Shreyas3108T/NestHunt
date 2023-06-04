@@ -3,6 +3,7 @@ const { validationResult } = require("express-validator");
 const bcrypt = require("bcrypt")
 const User = require("../MongoDBDatabaseConfig/models/Users")
 const {TokenGenerator,verifyToken} = require("../DevHelp/Token")
+const { IdGenerator } = require("../DevHelp/ID");
 require("dotenv").config()
 const ProjectId = process.env.Project_Id
 
@@ -21,6 +22,7 @@ class Authentication{
             const Password = await bcrypt.hash(password, 10);
 
             const UserObject = {
+                    Id:"U-"+IdGenerator(),
                     Name:Name,
                     Email:Email,
                     PhoneNo:PhoneNo,
@@ -119,6 +121,44 @@ class Authentication{
         }
         catch(error){
             return unsuccessfulResponse(req,res,501,"Internal server error",error,ProjectId)
+        }
+    }
+
+    async CreateEmployeeAccount(req,res){
+        try{
+            const {Name,Email,PhoneNo,password} = req.body
+            const Password = await bcrypt.hash(password, 10)
+            const PgOwnerInfo = await User.findOne({Id:req.userId})
+            const UserObject = {
+                Id:"U-"+IdGenerator(),
+                Name:Name,
+                Email:Email,
+                PhoneNo:PhoneNo,
+                Type:"PgEmployee",
+                Password:Password,
+                PgAssociation:PgOwnerInfo.PgAssociation
+            } 
+        
+        
+
+        const newUser = new User(UserObject)
+        newUser.save()
+        return successfulResponse(res,"Employee Created Successfully save the password you wont see it again",{Email:Email,Password:password})
+
+        }
+        catch(error){
+            return unsuccessfulResponse(req,res,501,"Internal Server Error CreateEmployeeAccount",error,ProjectId)
+        }
+    }
+
+    async ShowAllEmployeesInaPg(req,res){
+        try{
+            const UserInfo = await User.findOne({Id:req.userId})
+            const Employees = await User.find({Type:"PgEmployee",PgAssociation:UserInfo.PgAssociation})
+            return successfulResponse(res,"Here are all the employees in the Pg",Employees)
+        }
+        catch(error){
+            return unsuccessfulResponse(req,res,501,"Internal server ErrorShowAllEMployeesInaPg",error,ProjectId)
         }
     }
 }

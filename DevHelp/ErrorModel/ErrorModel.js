@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const {DevDb} = require("../../MongoDBDatabaseConfig/Db")
+const {DevDb,MainDb} = require("../../MongoDBDatabaseConfig/Db")
 require("dotenv").config()
 
 const uri = process.env.DATABASE_DEV_HELP;
@@ -21,4 +21,4 @@ const ErrorSchema  = new Schema({
 },
 { timestamps: true })
 
-module.exports = DevDb.model('Error',ErrorSchema);
+module.exports = MainDb.model('Error',ErrorSchema);
