@@ -30,22 +30,37 @@ class Notice{
             return unsuccessfulResponse(req,res,501,"Internal Server Error",error,ProjectId)
         }
     }
-
-    async Notice(req,res){
+    async GetNotice(req,res){
         try{
-            const UserId = req.UserId
+            const UserId = req.userId
+            const {OnlyActive} = req.query
             const UserInfo = await UserSchema.findOne({Id:UserId})
             if(UserInfo.PgAssociation){
-                const Notices = await  Notice.find({PgId:UserInfo.PgAssociation,Active:true})
+                const Notices = await  NoticeSchema.find({PgId:UserInfo.PgAssociation,Active:OnlyActive})
                 return successfulResponse(res,"All the notices",Notices)
             }
             
         }
         catch(error){
+            console.log(error)
             return unsuccessfulResponse(req,res,501,"Intenal Server Error",error,ProjectId)
         }
     }
-
+    async DeactivateNotice(req,res){
+        try{
+            const {NoticeId} = req.body
+            const UserInfo = await UserSchema.findOne({Id:req.userId})
+            const Notice = await NoticeSchema.findOne({Id:NoticeId})
+            if(UserInfo.PgAssociation === Notice.PgId){
+                const update = await NoticeSchema.updateOne({Id:NoticeId},{Active:false})
+                return successfulResponse(res,"Notice removed successfully",{})
+            }
+            return unsuccessfulResponse(req,res,402,"PgId dont match","PgId dont match",ProjectId)
+        }
+        catch(error){
+            return unsuccessfulResponse(req,res,501,"Internal server error",error,ProjectId)
+        }
+    }
 }
 
 module.exports = new Notice
