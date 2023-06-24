@@ -161,6 +161,20 @@ class Authentication{
             return unsuccessfulResponse(req,res,501,"Internal server ErrorShowAllEMployeesInaPg",error,ProjectId)
         }
     }
+    async UserInfoFromUserId(req,res){
+        try{
+            const {UserId} = req.body
+            const UserInfo = await User.findOne({Id:UserId})
+            if(!UserInfo){
+                return unsuccessfulResponse(req,res,404,"No User with such Id","In-correct UserId",ProjectId)
+            }
+            return successfulResponse(res,"UserName",{UserName:UserInfo.Name})
+        }
+        catch(error){
+            return unsuccessfulResponse(req,res,501,"internal server error UserInfoFromUserId",error,ProjectId)
+        }
+    }
+
 }
 
 module.exports = new Authentication

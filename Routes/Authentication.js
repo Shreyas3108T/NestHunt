@@ -40,4 +40,6 @@ router.post("/CreateEmployeeAccount",[
 middleware.inputValidation,middleware.verfiyLogin,middleware.verfiyPgOwner,controller.CreateEmployeeAccount)
 
 router.get("/GetAllEmployees",middleware.verfiyLogin,middleware.verfiyPgOwner,controller.ShowAllEmployeesInaPg)
+
+router.get("/Username",middleware.verfiyLogin,controller.UserInfoFromUserId)
 module.exports = router
