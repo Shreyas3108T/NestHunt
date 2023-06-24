@@ -41,5 +41,5 @@ middleware.inputValidation,middleware.verfiyLogin,middleware.verfiyPgOwner,contr
 
 router.get("/GetAllEmployees",middleware.verfiyLogin,middleware.verfiyPgOwner,controller.ShowAllEmployeesInaPg)
 
-router.get("/Username",middleware.verfiyLogin,controller.UserInfoFromUserId)
+router.get("/Username",controller.UserInfoFromUserId)
 module.exports = router
