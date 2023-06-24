@@ -163,8 +163,8 @@ class Authentication{
     }
     async UserInfoFromUserId(req,res){
         try{
-            const {UserId} = req.body
-            const UserInfo = await User.findOne({Id:UserId})
+            const {UserId} = req.query
+            const UserInfo = await User.findOne({Id:UserId})   
             if(!UserInfo){
                 return unsuccessfulResponse(req,res,404,"No User with such Id","In-correct UserId",ProjectId)
             }
