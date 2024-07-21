@@ -6,6 +6,7 @@ const {TokenGenerator,verifyToken} = require("../DevHelp/Token")
 const { IdGenerator } = require("../DevHelp/ID");
 require("dotenv").config()
 const ProjectId = process.env.Project_Id
+// console.log(process.env.JWT_ACCESS_TOKEN_SECRET)
 
 class Authentication{
 
@@ -18,8 +19,9 @@ class Authentication{
             if(!ValidatonError.isEmpty()){
                 return unsuccessfulResponse(req,res,422,"Validation Error",ValidatonError,ProjectId)
             }
-            
+
             const Password = await bcrypt.hash(password, 10);
+
 
             const UserObject = {
                     Id:"U-"+IdGenerator(),
@@ -29,6 +31,7 @@ class Authentication{
                     Type:Type,
                     Password:Password
             } 
+
             
             
 
@@ -37,15 +40,17 @@ class Authentication{
                 saveduser = await newUser.save();
             }
             catch(error){
-                return unsuccessfulResponse(req,res,503,"Some Problem with saving data onto the database",error,ProjectId)
+                return unsuccessfulResponse(req,res,501,"Some Problem with saving data onto the database",error,ProjectId)
+                
             }
-
+            
+            
             const newToken = TokenGenerator({Id:saveduser.Id,userType:Type})
             return successfulResponse(res,"User Created Successfully",{JWTToken:newToken})
 
         }
         catch(error){
-            console.log(Error)
+            
             return unsuccessfulResponse(req,res,501,"Internal server Error",error,ProjectId)
         }
     }
@@ -56,7 +61,7 @@ class Authentication{
             const ValidationError = validationResult(req)
 
             if(!ValidationError.isEmpty()){
-                return unsuccessfulResponse(req,res,503,"internal serve Error",error,ProjectId)
+                return unsuccessfulResponse(req,res,501,"internal serve Error",error,ProjectId)
             }
             const user = await User.findOne({Email:Email})
             if (!user){
