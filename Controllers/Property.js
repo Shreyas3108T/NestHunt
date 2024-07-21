@@ -88,7 +88,7 @@ class properity{
             distance =req.query.distance // in meters
         }
         if (type == 2){ // area 
-            distance = 6000
+            distance = 20000
         }
         try{
             const targetLocation = {
