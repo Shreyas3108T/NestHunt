@@ -5,6 +5,8 @@ const property = require("../MongoDBDatabaseConfig/models/Properties")
 const UserSchema = require("../MongoDBDatabaseConfig/models/Users")
 const BookingSchema = require("../MongoDBDatabaseConfig/models/Booking")
 const Room = require("../MongoDBDatabaseConfig/models/Rooms")
+const Property = require("../MongoDBDatabaseConfig/models/Properties")
+// const Room = require("../MongoDBDatabaseConfig/models/Rooms")
 const {validationResult} =  require("express-validator");
 const ProjectId = process.env.ProjectId
 
@@ -34,10 +36,11 @@ class Booking{
             })
 
             const SavedReq = await NewViewRequest.save()
-            return successfulResponse(res,"Your request is pending",{BookingId:check.Id,approvalStatus:SavedReq.Approval})
+            return successfulResponse(res,"Your request is pending",{BookingId:SavedReq.Id,approvalStatus:SavedReq.Approval})
 
         }
         catch(error){
+            console.log(error);
             return unsuccessfulResponse(req,res,501,"internal server error",error,ProjectId)
         }
     }
@@ -183,16 +186,35 @@ class Booking{
     }
 
     async Bookinghistory(req,res){
-        try{
-            const bookings = await BookingSchema.find({UserId:req.userId})
-            if (bookings.length === 0){
-                return successfulResponse(res,"No Booking History",[])
+        try {
+            const bookings = await BookingSchema.find({ UserId: req.userId });
+        
+            if (bookings.length === 0) {
+              return successfulResponse(res, "No Booking History", []);
             }
-            return successfulResponse(res,"Booking history",bookings)
-        }
-        catch(error){
-            return unsuccessfulResponse(req,res,501,"Internal server Error",ProjectId)
-        }
+        
+            const enrichedBookings = []; // Create a new array for modified bookings
+        
+            for (const booking of bookings) {
+              const pg = await Property.findOne({ Id: booking.PgId });
+              let roomName = "None";
+              try{
+                const room = await Room.findOne({RoomId: booking.RoomId});
+                // console.log(room)
+                roomName = room.RoomName;
+              }
+              catch(error){
+                roomName = booking.RoomId;
+              }
+              const enrichedBooking = { ...booking, PgName: pg.Name,RoomName:roomName }; // Create a new object
+              enrichedBookings.push(enrichedBooking); // Add the enriched object to the new array
+            }
+        
+            return successfulResponse(res, "Booking history", enrichedBookings);
+          } catch (error) {
+            console.log(error);
+            return unsuccessfulResponse(req, res, 501, "Internal server Error", error);
+          }
     }
 }
 
