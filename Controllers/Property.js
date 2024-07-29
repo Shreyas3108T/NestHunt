@@ -219,7 +219,7 @@ class properity{
         try{
             // req.userId
 
-            const PG = await Property.findOne({Owner:req.userId})
+            const PG = await Property.find({Owner:req.userId})
             if(!PG){
                 return unsuccessfulResponse(req,res,203,"No Pg Created by the user,prompt to create new Pg",PG,ProjectId)
             }
@@ -235,17 +235,3 @@ class properity{
 
 module.exports = new properity
 
-// const newProperty = new Property({
-//   Owner: 'John Smith',
-//   Name: 'Beautiful House',
-//   address: {
-//     street: '123 Main St',
-//     city: 'Anytown',
-//     state: 'CA',
-//     zip: '12345',
-//     location: {
-//       type: 'Point',
-//       coordinates: [-118.123456, 34.123456]
-//     }
-//   }
-// });
