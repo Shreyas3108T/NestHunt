@@ -42,4 +42,6 @@ middleware.inputValidation,middleware.verfiyLogin,middleware.verfiyPgOwner,contr
 router.get("/GetAllEmployees",middleware.verfiyLogin,middleware.verfiyPgOwner,controller.ShowAllEmployeesInaPg)
 
 router.get("/Username",controller.UserInfoFromUserId)
+
+router.get("/tenants",middleware.verfiyLogin,middleware.verfiyPgOwner,controller.AllTenantsInAPg);
 module.exports = router

@@ -180,6 +180,18 @@ class Authentication{
         }
     }
 
+    async AllTenantsInAPg(req,res){
+        try{
+            const {PgId} = req.query;
+            const currentUser = await User.findOne({Id:req.userId});
+            const Users = await User.find({PgAssociation:PgId},{ Password: 0 });
+            return successfulResponse(res,"all Users",Users);
+        }
+        catch(error){
+            return unsuccessfulResponse(req,res,501,"internal server error AllTenantsInAPg",error,ProjectId);
+        }
+    }
+
 }
 
 module.exports = new Authentication
