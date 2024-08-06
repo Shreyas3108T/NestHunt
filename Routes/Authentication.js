@@ -44,4 +44,5 @@ router.get("/GetAllEmployees",middleware.verfiyLogin,middleware.verfiyPgOwner,co
 router.get("/Username",controller.UserInfoFromUserId)
 
 router.get("/tenants",middleware.verfiyLogin,middleware.verfiyPgOwner,controller.AllTenantsInAPg);
+
 module.exports = router
