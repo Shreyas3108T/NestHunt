@@ -6,7 +6,6 @@ const UserSchema = require("../MongoDBDatabaseConfig/models/Users")
 const BookingSchema = require("../MongoDBDatabaseConfig/models/Booking")
 const Room = require("../MongoDBDatabaseConfig/models/Rooms")
 const Property = require("../MongoDBDatabaseConfig/models/Properties")
-// const Room = require("../MongoDBDatabaseConfig/models/Rooms")
 const {validationResult} =  require("express-validator");
 const ProjectId = process.env.ProjectId
 
@@ -121,7 +120,7 @@ class Booking{
             }));
 
             const BookingElements = Array.from(BookingReqelements).filter(element => element !== null);
-            if (BookingElements.length >0){
+            if (BookingElements.length >0){ //12/03
                 return successfulResponse(res,"All the active booking Request",BookingElements)
             }
             return successfulResponse(res,"No active bookings found",{})
